@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import createHttpError, { HttpError } from "http-errors";
 import { config } from "./config/config";
 import globalErrorHandler from "./middleware/globalErrorHandler";
+import userRouter from "./user/userRoutes";
 
 const app = express();
 
@@ -15,6 +16,8 @@ app.get("/", (req, res, next) => {
   // const error = createHttpError(400, "something went wrong");
   // throw error;
 });
+
+app.use("/api/users", userRouter);
 
 //global error handler   -> it should be in the last
 
