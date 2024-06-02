@@ -2,6 +2,7 @@ import { create } from "domain";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import userModel from "./userModel";
+import bcrypt from "bcrypt";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
@@ -19,6 +20,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     const error = createHttpError(400, "user already exists with this email.");
     return next(error);
   }
+
+  //after that we have to user into the database
+  //for that we have to hashed password
+
+  //   password ---> hash
+  const hashedPassword = bcrypt.hash(password, 10); //2nd parameter is no of salt round
+
   //process
   //response
 
