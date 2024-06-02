@@ -3,7 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import userModel from "./userModel";
 import bcrypt from "bcrypt";
-
+import { sign } from "jsonwebtoken";
+import { config } from "../config/config";
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password } = req.body;
   //validation
@@ -25,13 +26,24 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   //for that we have to hashed password
 
   //   password ---> hash
-  const hashedPassword = bcrypt.hash(password, 10); //2nd parameter is no of salt round
+  const hashedPassword = await bcrypt.hash(password, 10); //2nd parameter is no of salt round
 
-  //process
+  //add user to database
+  const newUser = await userModel.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  //Token generation JWT
+  const token = sign({ sub: newUser._id }, config.jwtSecret as string, {
+    expiresIn: "7d",
+    algorithm: "HS256",
+  });
+
   //response
-
   res.json({
-    message: "User Registered",
+    accessToken: token,
   });
 };
 
