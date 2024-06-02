@@ -5,9 +5,9 @@ import globalErrorHandler from "./middleware/globalErrorHandler";
 import userRouter from "./user/userRoutes";
 
 const app = express();
+app.use(express.json());
 
 //routes
-
 app.get("/", (req, res, next) => {
   res.json({
     message: "Welcome to Ebook Apis",
