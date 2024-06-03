@@ -9,6 +9,7 @@ const _config = {
   cloudinaryCloud: process.env.ClOUDINARY_CLOUD,
   cloudinaryApiKey: process.env.ClOUDINARY_API_KEY,
   cloudinarySecret: process.env.ClOUDINARY_API_SECRET,
+  frontentDomain: process.env.FRONTENT_DOMAIN,
 };
 
 export const config = _config; //read only
