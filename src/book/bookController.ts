@@ -130,6 +130,26 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
       await fs.promises.unlink(bookFilePath);
     }
 
+    //delete image and pdf from cloudinary
+    const coverFileSplits = book.coverImage.split("/");
+    const coverImagePublicId =
+      coverFileSplits.at(-2) + "/" + coverFileSplits.at(-1)?.split(".").at(-2);
+
+    const bookFileSplits = book.file.split("/");
+    const bookFilePublicId =
+      bookFileSplits.at(-2) + "/" + bookFileSplits.at(-1);
+    console.log("bookFilePublicId", bookFilePublicId);
+
+    if (completeCoverImage) {
+      await cloudinary.uploader.destroy(coverImagePublicId);
+    }
+
+    if (completeFileName) {
+      await cloudinary.uploader.destroy(bookFilePublicId, {
+        resource_type: "raw",
+      });
+    }
+
     const updatedBook = await bookModel.findOneAndUpdate(
       {
         _id: bookId,

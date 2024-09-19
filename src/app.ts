@@ -8,6 +8,7 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 
+//cors configuration
 app.use(
   cors({
     origin: config.frontentDomain,
